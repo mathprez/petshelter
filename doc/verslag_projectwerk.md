@@ -974,6 +974,45 @@ Hierboven staat er telkens ```app-x``` als Vue object en wat HTML ernaast. Het i
 
 Dit is een implementatie van "Custom Element", een onderdeel van het Web Component Spec. Elke custom tag (bijvoorbeeld ```app-content```) is een Vue object (component) met daarin een HTML template en JavaScript logica.
 
+Bijvoorbeeld: elke node in onderstaande structuur is een Vue component.
+
+```
+app (hoofd)
+│   navigatie
+│
+└───sidebar
+│   │   headline-lijst
+│   │   spotlight-pet-artikel
+│
+└───pets-slideshow
+│   │
+│   └───pets-data-access
+│   │   │   (extern component)
+│   │
+│   └───slideshow-component
+│       │   (extern component)
+```
+
+Vue laat je toe dit als volgt de definiëren in HTML:
+
+```html
+<!-- html -->
+<html>
+    <body>
+        <div id="app">
+            <app-nav></app-nav>
+            <app-sidebar>
+                <app-headlines></app-headlines>
+                <app-pet-spotlight></app-pet-spotlight>
+            </app-sidebar>
+            <app-slideshow></app-slideshow>
+        </div>
+    </body>
+</html>
+```
+
+Dit is een implementatie van "Custom Element", een onderdeel van het Web Component Spec. Elke custom tag (bijvoorbeeld ```app-content```) is een Vue object (component) met daarin een HTML template en JavaScript logica.
+
 Een voorbeeld van zo'n component in .vue formaat (te gebruiken na project creatie met Vue CLI of UI)
 
 ```html
