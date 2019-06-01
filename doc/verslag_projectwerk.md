@@ -758,6 +758,19 @@ formData.append('image', this.file, this.file.name);
 
 Dit object wordt samen met ```axios``` (een soort frontend HttpClient, zie hieronder) verzonden naar de petshelter API. Daar wordt de file geparst naar een ```IFile``` datatype, om vervolgens gestreamd te worden naar een ```byte``` array. Eerst worden de bytes naar een ```Image``` datatype omgezet om de extensie te kunnen bepalen. Als die geldig is worden de bytes met de overige ```Image``` info opgeslaan in SQL Server als binaire data: ```VARBINARY(MAX)```.
 
+Als je deze data wilt zenden naar de frontend, moet dat via JSON. JSON ondersteunt echter geen ```byte[]``` datatype. Daarom moet je de bytes eerst omzetten naar een base64 geëncodeerde string. In petshelter gebeurt dit door AutoMapper:
+
+```cs
+public PetMapping()
+{
+    .ForMember(pet => pet.Base64Image,
+        opt => opt.MapFrom(src =>
+        src.Image != null
+            ? $"data:image/{src.Image.ContentType.ToLower()};base64,{Convert.ToBase64String(src.Image.Data)}"
+            : null));
+}
+```
+
 ### Client: Vue, Vue plugins en andere NPM pakketten
 
 #### Wat is Vue
