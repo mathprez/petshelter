@@ -1,0 +1,47 @@
+﻿@import "../styles/petshelterstyles.scss";
+
+.appointment-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.appointment-card {
+    flex-direction: column;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-evenly;
+    /*border: 2px solid;*/
+    background-color: $primary-light;
+    margin: 30px;
+    align-items: center;
+}
+
+@media screen and (min-width: 1088px) {
+    .appointment-card {
+        flex-direction: row;
+    }
+}
+
+.delete-button {
+    cursor:pointer;
+}
+
+.delete-button:hover {
+    color: $danger;
+}
+
+.appointment-element {
+    text-align: center;
+    min-width: 15%;
+    margin: 20px auto 20px auto;
+    align-self: center;
+
+    &.has-image {
+        align-self: auto;
+    }
+}
+
+.is-pet-image {
+    max-height: 300px;
+    border-radius: 8px;
+}

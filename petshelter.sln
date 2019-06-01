@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "petshelterApi", "petshelterApi\petshelterApi.csproj", "{364C139E-8B4E-45D7-BA21-F61D363FC941}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "petshelterClient", "petshelterClient\", "{F80BC38A-80A3-48D3-AB34-671C18B32093}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64981"
+		Debug.AspNetCompiler.PhysicalPath = "petshelterClient\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64981\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64981"
+		Release.AspNetCompiler.PhysicalPath = "petshelterClient\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64981\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64981"
+		SlnRelativePath = "petshelterClient\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{364C139E-8B4E-45D7-BA21-F61D363FC941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{364C139E-8B4E-45D7-BA21-F61D363FC941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{364C139E-8B4E-45D7-BA21-F61D363FC941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{364C139E-8B4E-45D7-BA21-F61D363FC941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F80BC38A-80A3-48D3-AB34-671C18B32093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F80BC38A-80A3-48D3-AB34-671C18B32093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F80BC38A-80A3-48D3-AB34-671C18B32093}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{F80BC38A-80A3-48D3-AB34-671C18B32093}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7735CC6D-18F3-4DD6-96BB-83524D22D5DE}
+	EndGlobalSection
+EndGlobal

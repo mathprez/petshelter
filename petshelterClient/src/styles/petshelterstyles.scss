@@ -1,0 +1,29 @@
+﻿// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+
+// Set your colors
+//$primary: #19a329;
+$primary: #d4aa00ff;
+$primary-light: #d4aa0022;
+$primary-invert: findColorInvert($primary);
+$twitter: #4099FF;
+$twitter-invert: findColorInvert($twitter);
+$grey: #939393;
+$grey-invert: findColorInvert($grey);
+
+//$pink: pink;
+// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+$colors: ( "white": ($white, $black), "grey": ($grey, $grey-invert), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert), "twitter": ($twitter, $twitter-invert) );
+
+// Links
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
+// Import Bulma and Buefy styles
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
+body, button {
+    font-family: 'Karla', sans-serif;
+}
