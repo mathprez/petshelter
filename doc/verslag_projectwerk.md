@@ -64,21 +64,21 @@ Mathijs Deprez
 
 ### Client: via NPM
 
-[Installeer Node.js en NPM](https://www.npmjs.com/get-npm)
+[Installeer Node.js en NPM](https://www.npmjs.com/get-npm).
 
-Installeer vue
+Installeer vue:
 
 ``` sh
 npm install vue
 ```
 
-Installeer vue cli/ui
+Installeer vue cli/ui:
 
 ``` sh
 npm install -g @vue/cli
 ```
 
-Navigeer naar het petshelterClient project (folder waar ```package.json``` in staat)
+Navigeer naar het petshelterClient project (folder waar ```package.json``` in staat):
 
 ``` sh
 cd C:\pad\naar\petshelterClient
@@ -98,7 +98,7 @@ Na de client gebouwd is zou er een boodschap moeten verschijnen dat petshelterCl
 
 [De API kan gebouwd worden via de dotnet CLI.](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21) Indien Visual Studio met .NET Core geïnstalleerd is, is ook de CLI geïnstalleerd. Of bouw het project via Visual Studio zelf. Anders kan met [deze installatiefiles](https://dotnet.microsoft.com/download/dotnet-core/2.2) .NET Core (x64) geïnstalleerd worden.
 
-Navigeer naar het petshelterClient project (folder waar ```csproj``` file in staat)
+Navigeer naar het petshelterClient project (folder waar ```csproj``` file in staat):
 
 ``` sh
 cd C:\pad\naar\petshelterApi
@@ -134,7 +134,7 @@ De hele applicatie moet responsief zijn en er degelijk uitzien.
 
 **Actor**|**Use case**|**Actor**
 :-----:|:-----:|:-----:
-Client|Authenticatie/Autorisatie|Auth0
+Client/Webservice|Authenticatie/Autorisatie|Auth0
 User|Overzicht huisdieren|SQL Server
 User|Afspraak maken|SQL Server
 Webservice|Afspraakmail|Mailgun
@@ -197,7 +197,7 @@ Een vrijwilliger is verplicht een foto te posten.
 
 #### Admin overzicht users
 
-Als de admin op een user klikt in de tabel, kan hij de shelter van die user aanpassen of verwijderen.
+Als de admin op een user klikt in de tabel, kan die de shelter van die user aanpassen of verwijderen.
 
 <img src="./Screenshots/Users.PNG" alt="" width="1600"/>
 
@@ -256,7 +256,7 @@ petshelterApi is een webservice geschreven in ASP.NET Core 2.2. De API heeft wat
 
 petshelterClient vormt de brug tussen de user en API via een Vue frontend. Vue is een JavaScript framework. Er worden enkele externe componenten gebruikt zoals Buefy, vue-router, axios, etc... Het zwakke punt aan de client is dat er niet echt een design pattern wordt toegepast. Voor een proof of concept werd dit eerst als redundant beschouwd, maar na enkele componenten te schrijven werd duidelijk dat er veel code herhaald wordt. Een store-pattern (dus: ```vuex``` implementatie) en enkele services zou de client code meer onderhoudbaar en scalable maken.
 
-Authenticatie en autorisatie worden zowel front- als backend geïmplementeerd. De identity provider is Auth0 of Google. Auth0 voorziet ook tools om alles omtrent authenticatie te configureren. Maar sommige stukjes zijn ook configureerbaar via code in de API. In petshelter wordt dit toegepast dat via een implementatie van de ```HttpClient``` klasse, die toegang geeft tot de Auth0 userstore.
+Authenticatie en autorisatie worden zowel front- als backend geïmplementeerd. De identity provider is Auth0 of Google. Auth0 voorziet ook tools om alles omtrent authenticatie te configureren. Maar sommige stukjes zijn ook configureerbaar via code in de API. In petshelter wordt dit toegepast via een implementatie van de ```HttpClient``` klasse, die toegang heeft tot de Auth0 userstore.
 
 Dit is een diagram van de technologiestack. Nieuwe technologieën hebben een grijze achtergrond.
 
@@ -340,7 +340,7 @@ Met de [MediatR Nuget Package](https://github.com/jbogard/MediatR) is het mogeli
 
 Bovendien vermijden men op die manier dat er logica in de controller wordt uitgevoerd, omdat MediatR het [Mediator design pattern](https://blogs.msdn.microsoft.com/cdndevs/2016/01/26/simplifying-development-and-separating-concerns-with-mediatr/) volgt. Die doet de contoller fungeren als een dispatcher van ```RequestHandler``` klasses, code die requests gaan afhandelen met ```IRequest``` implementaties.
 
-Voor petshelter is dit bijvoorbeeld de feature "Maak afspraak". Vooraleer een user een afspraak kan POSTen, moet hij data krijgen (GET) van beschikbare dagen. Pas daarna kan hij de afspraak POSTen. Dit is een typisch request-response scenario. Dit diagram stelt voor hoe data (de objecten, dit zijn de parallellogrammen), met de requests en responses meegezonden wordt.
+Voor petshelter is dit bijvoorbeeld de feature "Maak afspraak". Vooraleer een user een afspraak kan POSTen, moet die data krijgen (GET) van beschikbare dagen. Pas daarna kan de user de afspraak POSTen. Dit is een typisch request-response scenario. Dit diagram stelt voor hoe data (de objecten, dit zijn de parallellogrammen), met de requests en responses meegezonden wordt.
 
 <img src="./UmlDiagrams/CQRSExample.PNG" alt="" width="1600px"/>
 
@@ -406,11 +406,12 @@ public async Task<IActionResult> Create([FromBody]CreateAppointment.Command appo
 Onder de geneste class ```CreateAppointment``` zijn dit de ```Query```, ```Model``` en ```Command``` objecten en hun handlers:
 
 ```cs
-// geneste klasses zijn zorgen voor leesbare codes in controllers, zie hierboven
+// geneste klasses zorgen voor leesbare code in controllers, zie hierboven
+// e.g. var query = new CreateAppointment.Query();
 public class CreateAppointment
 {
     /* De data die de GET van de client oplevert.
-     Class Query erft over van Mediatr interface IRequest
+     Class Query erft over van MediatR interface IRequest
      en heeft als TResponse Model. */
     public class Query : IRequest<Model>
     {
@@ -508,7 +509,7 @@ public class CreateAppointment
             _petShelterDbContext.SaveChanges();
 
             /* AppointmentController zond een Command object
-             en krijgt een CommandResult terug */
+             en krijgt een CommandResult terug. */
             return new CommandResult(
                 HttpStatusCode.OK,
                 "The appointment has been created succesfully.",
@@ -609,7 +610,7 @@ De ```HttpClient``` class wordt gebruikt in petshelter voor verschillende zaken:
 * een "cat & dogapi client", die gebruikt wordt om seeddata aan de databank te leveren.
 * een Auth0Client, die dankzij bij ```Startup.cs``` een access token bij de standaard header toe te voegen, toegang heeft tot de Auth0 userstore.
 
-[HttpClient](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient) spreekt externe API's op een restful manier aan.
+[HttpClient](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient) spreekt externe API's op een RESTful manier aan.
 
 De HttpClient wordt geïnitaliseerd als volgt: (in tegenstelling tot ```using```, gezien het soms gevaarlijk is om constant nieuwe HttpClient instanties te maken):
 
@@ -700,9 +701,20 @@ Deze mail wordt gemaakt behulp van twee tools:
 
 Daarna wordt de mail verzonden via de [MailGun API](https://documentation.mailgun.com/en/latest/). Er wordt niet rechtsreeks gecommuniceerd met een SMTP server. Dit omdat een simpele [API call met het mimebestand](https://stackoverflow.com/questions/38840101/how-to-send-a-ical-invite-with-mailgun-rest-api-c) naar de Mailgun service veel performanter is.
 
-Een gewone mail via Mailgun verzenden kan ook veel eenvoudiger, door in plaats van de door MimeKit gegenereerde mail een simpele JSON object op te zenden. Er werd met MimeKit gewerkt omdat ICalendar niet ondersteund wordt via een gewone API call naar Mailgun. Dit is een voorbeeld van een simpele [Mailgun client](https://gist.github.com/duncansmart/3777530), zonder ICalender en met ```HttpClient```.
+Een gewone mail via Mailgun verzenden kan ook veel eenvoudiger, door in plaats van de door MimeKit gegenereerde mail een simpel JSON object op te zenden. Er werd met MimeKit gewerkt omdat ICalendar niet ondersteund wordt via een gewone API call naar Mailgun. Dit is een voorbeeld van een [Mailgun client](https://gist.github.com/duncansmart/3777530), zonder ICalender en met ```HttpClient```.
 
 Via een Mailgun dashboard worden gegevens zoals API key en domain URI aangeleverd.
+
+```cs
+//Startup.cs
+
+services.AddHttpClient<MailGunHttpClient>(client =>
+    {
+        var base64Token = Convert.ToBase64String(Encoding.UTF8.GetBytes("api" + ":" + Configuration["Mailgun:Token"]));
+        client.BaseAddress = new Uri(Configuration["Mailgun:Audience"] + Configuration["Mailgun:Domain"]);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Token);
+    });
+```
 
 ```cs
 public class MailGunHttpClient
@@ -1363,7 +1375,7 @@ Wanneer een user inlogt via petshelterClient, wordt die verbonden met de Auth0 A
 
 Om met een SPA in-en uit te loggen, en dus connecteren met de Auth0 Authorisation API, kan er gebruik gemaakt worden van de Implict Grant. Gedetailleerde uitleg [hier](https://auth0.com/docs/flows/guides/implicit/call-api-implicit#response). Kort gezegd wil het zeggen dat wanneer de pagina gerefresht wordt, er opnieuw moet ingelogd worden. Dit gebeurt echter heel vlot door middel van een JSON Web Token. De user hoeft dus niet telkens opnieuw in en uit te loggen (en email + wachtwoord opgeven).
 
-Deze JSON Web Token bevat een ```userId``` en een ```accessId```. De ```userId``` wordt gebruikt door de SPA om onder ander front end autorisatie toe te passen. Zo kan de ```authservice.js``` aangesproken worden in het ```Navbar.vue``` component om te controleren of de user de rol "volunteer" heeft, en al dan niet een link tonen. Een JSON Web Token is geëncrypteerd, tamperproof en heeft een time to live.
+Deze JSON Web Token bevat een ```userId``` en een ```accessId```. De ```userId``` wordt gebruikt door de SPA om o.a. frontend autorisatie toe te passen. Zo kan de ```authservice.js``` aangesproken worden in het ```Navbar.vue``` component om te controleren of de user de rol "volunteer" heeft, en al dan niet een link tonen. Een JSON Web Token is geëncrypteerd, tamperproof en heeft een time to live.
 
 De ```accessId``` wordt meegezonden met requests naar de petshelterAPI. Als de API de request accepteert, controleert die of er een correcte ```accessId``` in de headers zit.
 
@@ -1437,7 +1449,7 @@ De Auth0 Management API kan niet rechtsreeks aangesproken worden door de SPA cli
 
 ##### Resource based authorization
 
-Naast rollen en claims, is er soms data nodig die men niet terugvindt in de accesstoken. Bijvoorbeeld, wanneer een user zich inlogt op petshelter, geeft de authenticatie niet terug welke afspraken hij heeft. Dus wanneer er een DELETE HTTP method vertrekt vanuit petshelterClient, die vraagt om een afspraak te verwijderen, moet de database eerst kunnen verifiëren of de ```userID``` uit de accesstoken overeenkomt met de ```UserID``` van het ```Appointment``` model. Als niet aan voorwaarde niet wordt voldaan, geeft de controller een ```Forbid()``` terug. Hiervoor kan men [Resource based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-2.1&tabs=aspnetcore2x) inzetten.
+Naast rollen en claims, is er soms data nodig die men niet terugvindt in de accesstoken. Bijvoorbeeld, wanneer een user zich inlogt op petshelter, geeft de authenticatie niet terug welke afspraken die heeft. Dus wanneer er een DELETE HTTP method vertrekt vanuit petshelterClient, die vraagt om een afspraak te verwijderen, moet de database eerst kunnen verifiëren of de ```userID``` uit de accesstoken overeenkomt met de ```UserID``` van het ```Appointment``` model. Als die niet gelijk zijn, geeft de controller een ```Forbid()``` terug. Hiervoor kan men [Resource based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-2.1&tabs=aspnetcore2x) inzetten.
 
 Hiervoor wordt er een implementatie van de ```IAuthorizationService``` geregistreerd bij ```Startup.cs``` en geïnjecteerd in ```AppointmentController```.
 
