@@ -14,7 +14,7 @@ Mathijs Deprez
   - [Inhoudstafel](#inhoudstafel)
   - [petshelter opstarten](#petshelter-opstarten)
     - [Client: via NPM](#client-via-npm)
-    - [API: via dotnet console API](#api-via-dotnet-console-api)
+    - [API: via dotnet console CLI](#api-via-dotnet-console-cli)
   - [Functionele analyse](#functionele-analyse)
     - [Probleembeschrijving](#probleembeschrijving)
     - [Use Cases](#use-cases)
@@ -64,16 +64,16 @@ Mathijs Deprez
 
 ### Client: via NPM
 
-[Installeer Node.js en NPM](https://www.npmjs.com/get-npm).
+[Download en nstalleer Node.js (en NPM) met deze link](https://www.npmjs.com/get-npm).
 
-Installeer vue:
+Open een console scherm en voer volgende commands uit:
 
 ``` sh
-npm install vue
+#sh
+npm install -g npm@latest
 ```
 
 Installeer vue cli/ui:
-
 ``` sh
 npm install -g @vue/cli
 ```
@@ -84,23 +84,40 @@ Navigeer naar het petshelterClient project (folder waar ```package.json``` in st
 cd C:\pad\naar\petshelterClient
 ```
 
-Voer volgend command uit:
+Installeer de node dependencies:
 
 ``` sh
-npm run serve
+npm install
 ```
+
+Open de Vue UI Interface naar Vue CLI.
+
+``` sh
+vue ui
+```
+
+Voer het volgende uit binnen Vue UI, een browserinterface naar de CLI, die opent op je browser:
+
+- Klik op "Importeren".
+- Controleer of de folder correct is en klik op "Deze map importeren".
+- Ga naar Taken
+- Specifieer bij "parameters" poort: 8080
+- Klik op serve!
 
 Na de client gebouwd is zou er een boodschap moeten verschijnen dat petshelterClient aan het draaien is op poort 8080. Navigeer via Chrome naar http://localhost:8080.
 
-### API: via dotnet console API
+### API: via dotnet console CLI
 
 **Pas op: de ```appsettings.development.json``` bevat API keys voor o.a. Mailgun. Deze blijven dus beter privaat! In die file kan men ook de TestMail parameter aanpassen.**
+
+Open een nieuwe shell.
 
 [De API kan gebouwd worden via de dotnet CLI.](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21) Indien Visual Studio met .NET Core geïnstalleerd is, is ook de CLI geïnstalleerd. Of bouw het project via Visual Studio zelf. Anders kan met [deze installatiefiles](https://dotnet.microsoft.com/download/dotnet-core/2.2) .NET Core (x64) geïnstalleerd worden.
 
 Navigeer naar het petshelterClient project (folder waar ```csproj``` file in staat):
 
 ``` sh
+#sh
 cd C:\pad\naar\petshelterApi
 ```
 
@@ -110,7 +127,13 @@ Voer volgend command uit:
 dotnet run
 ```
 
-Volgens de launchsettings.json zou de API moeten draaien op https://localhost:44385/. Test de API via de publieke call https://localhost:44385/api/pets.
+Of, als je meer details, o.a. poortnummer wil:
+
+``` sh
+dotnet run -c Debug -v d
+```
+
+Als de ```launchsettings.json``` goed configureerd is, zou de API moeten draaien op https://localhost:44385/. Test de API via de publieke call https://localhost:44385/api/pets.
 
 ## Functionele analyse
 
