@@ -96,7 +96,7 @@ Na de client gebouwd is zou er een boodschap moeten verschijnen dat petshelterCl
 
 **Pas op: de ```appsettings.development.json``` bevat API keys voor o.a. Mailgun. Deze blijven dus beter privaat! In die file kan men ook de TestMail parameter aanpassen.**
 
-[De API kan gebouwd worden via de dotnet CLI.](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21) Met Visual Studio met .NET Core werkt is de CLI standaard geïnstalleerd. Of bouw het project via Visual Studio zelf. Anders kan met [deze installatiefiles](https://dotnet.microsoft.com/download/dotnet-core/2.2) .NET Core (x64) geïnstalleerd worden.
+[De API kan gebouwd worden via de dotnet CLI.](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21) Indien Visual Studio met .NET Core geïnstalleerd is, is ook de CLI geïnstalleerd. Of bouw het project via Visual Studio zelf. Anders kan met [deze installatiefiles](https://dotnet.microsoft.com/download/dotnet-core/2.2) .NET Core (x64) geïnstalleerd worden.
 
 Navigeer naar het petshelterClient project (folder waar ```csproj``` file in staat)
 
@@ -252,7 +252,7 @@ Deze properties zijn te krijgen van de Auth0 userstore:
 
 petshelter is een applicatie die bestaat uit twee projecten: petshelterAPI & petshelterClient. Hieronder een kort overzicht van de technologiestack.
 
-petshelterApi is een webservice geschreven in ASP.NET Core 2.2. De API heeft wat REST elementen, maar het kan het zeker geen RESTful API genoemd worden. Het is de bedoeling dat de API enkel ingezet wordt als data access voor één frontend, en daarom is volledig RESTful werken overbodig.
+petshelterApi is een webservice geschreven in ASP.NET Core 2.2. De API heeft wat REST elementen, maar het kan zeker geen RESTful API genoemd worden. Het is de bedoeling dat de API enkel ingezet wordt als data access voor één frontend, en daarom is volledig RESTful werken overbodig.
 
 petshelterClient vormt de brug tussen de user en API via een Vue frontend. Vue is een JavaScript framework. Er worden enkele externe componenten gebruikt zoals Buefy, vue-router, axios, etc... Het zwakke punt aan de client is dat er niet echt een design pattern wordt toegepast. Voor een proof of concept werd dit eerst als redundant beschouwd, maar na enkele componenten te schrijven werd duidelijk dat er veel code herhaald wordt. Een store-pattern (dus: ```vuex``` implementatie) en enkele services zou de client code meer onderhoudbaar en scalable maken.
 
@@ -698,11 +698,11 @@ Deze mail wordt gemaakt behulp van twee tools:
 * [MimeKit](http://www.mimekit.net/): een libary die toelaat bestanden van een specifiek MimeType aan te maken.
 * [ICal.NET](https://github.com/rianjs/ical.net): een tool die na configuratie in code een ICal string teruggeeft.
 
-Daarna wordt de mail verzonden via de [MailGun API](https://documentation.mailgun.com/en/latest/). Er wordt niet rechtsreeks gecommuniceerd met een SMTP server. Dit omdat een simple [API call met het mimebestand](https://stackoverflow.com/questions/38840101/how-to-send-a-ical-invite-with-mailgun-rest-api-c) naar de Mailgun service veel performanter is.
+Daarna wordt de mail verzonden via de [MailGun API](https://documentation.mailgun.com/en/latest/). Er wordt niet rechtsreeks gecommuniceerd met een SMTP server. Dit omdat een simpele [API call met het mimebestand](https://stackoverflow.com/questions/38840101/how-to-send-a-ical-invite-with-mailgun-rest-api-c) naar de Mailgun service veel performanter is.
 
-Een gewone mail via Mailgun verzenden kan ook veel eenvoudiger, door in plaats van de door MimeKit gegenereerde mail een simple JSON object op te zenden. Er werd met MimeKit gewerkt omdat ICalendar niet ondersteund wordt via een gewone API call naar Mailgun. Dit is een voorbeeld van een simpele [Mailgun client](https://gist.github.com/duncansmart/3777530), zonder ICalender en met ```HttpClient```.
+Een gewone mail via Mailgun verzenden kan ook veel eenvoudiger, door in plaats van de door MimeKit gegenereerde mail een simpele JSON object op te zenden. Er werd met MimeKit gewerkt omdat ICalendar niet ondersteund wordt via een gewone API call naar Mailgun. Dit is een voorbeeld van een simpele [Mailgun client](https://gist.github.com/duncansmart/3777530), zonder ICalender en met ```HttpClient```.
 
-Via een Mailgun dashboard worden gegevens zoals API key en domain URI.
+Via een Mailgun dashboard worden gegevens zoals API key en domain URI aangeleverd.
 
 ```cs
 public class MailGunHttpClient
@@ -1297,11 +1297,11 @@ petshelter maakt gebruik van Auth0 services. Auth0 biedt een compleet platform a
 
 Om te starten met Auth0 moet er een "tenant" aangemaakt worden. Deze wordt geïdentificeerd met een domain. Op deze tenant zit alle authenticatie configuratie: users, roles, rules...
 
-Ook mogelijke Idenity providers zijn te configureren. Naast Auth0 is voor petshelter Google als mogelijke Identity provider geconfigureerd.
+Ook mogelijke Idenity providers zijn te configureren. Naast Auth0 zelf, is voor petshelter Google als mogelijke Identity provider geconfigureerd.
 
 Naast al die zaken, kunnen bestaande applicaties toegevoegd worden via het Auth0 dashboard.
 
-Bij het registreren van een applicatie krijgt de applicatie een ClientId en ClientSecret toegewezen van Auth0. Met deze gegevens kunnen bijvoorbeeld users inloggen, of de API credentials laten aanvragen voor toegang tot de Auth0 userstore. Zowel de petshelterClient als petshelterAPI zijn geregistreerd bij Auth0. petshelterClient krijgt geen ClientSecret: gezien de publieke aard van Single Page Applications mogen zij die niet bijhouden.
+Bij het registreren van een applicatie krijgt de applicatie een ClientId en ClientSecret toegewezen van Auth0. Met deze gegevens kunnen bijvoorbeeld users inloggen, of kan de API credentials aanvragen voor toegang tot de Auth0 userstore. Zowel de petshelterClient als petshelterAPI zijn geregistreerd bij Auth0. petshelterClient krijgt geen ClientSecret: gezien de publieke aard van Single Page Applications mogen zij die niet bijhouden.
 
 Applicaties loggen als het ware aan bij de tenant met ClientId en ClientSecret, terwijl users aanloggen bij de tenant met hun mail en wachtwoord.
 
@@ -1369,7 +1369,7 @@ De ```accessId``` wordt meegezonden met requests naar de petshelterAPI. Als de A
 
 #### API configuratie
 
-De API met deze JSON Web Token Access Id dus kunnen parsen, en daarnaast ook kunnen omgaan met de encryptie en security. Dit gebeurt via configuratie in de ```Startup.cs```.
+De API moet deze JSON Web Token Access Id dus kunnen parsen, en daarnaast ook kunnen omgaan met de encryptie en security. Dit gebeurt via configuratie in de ```Startup.cs```.
 
 ```cs
 public void ConfigureServices(IServiceCollection services)
@@ -1437,7 +1437,7 @@ De Auth0 Management API kan niet rechtsreeks aangesproken worden door de SPA cli
 
 ##### Resource based authorization
 
-Naast rollen en claims, is er soms data nodig die men niet terugvindt in de accesstoken. Bijvoorbeeld, wanneer een user zich inlogt op petshelter, geeft de authenticatie niet terug welke afspraken hij heeft. Dus wanneer er een DELETE HTTP method vertrekt vanuit petshelterClient, die vraagt om een afspraak te verwijderen, moet de database eerst kunnen verifiëren of de ```userID``` uit de accesstoken overeenkomt met de ```UserID``` van het ```Appointment``` model. Als die voorwaarde niet vervult wordt, geeft de controller een ```Forbid()``` terug. Hiervoor kan men [Resource based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-2.1&tabs=aspnetcore2x) inzetten.
+Naast rollen en claims, is er soms data nodig die men niet terugvindt in de accesstoken. Bijvoorbeeld, wanneer een user zich inlogt op petshelter, geeft de authenticatie niet terug welke afspraken hij heeft. Dus wanneer er een DELETE HTTP method vertrekt vanuit petshelterClient, die vraagt om een afspraak te verwijderen, moet de database eerst kunnen verifiëren of de ```userID``` uit de accesstoken overeenkomt met de ```UserID``` van het ```Appointment``` model. Als niet aan voorwaarde niet wordt voldaan, geeft de controller een ```Forbid()``` terug. Hiervoor kan men [Resource based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-2.1&tabs=aspnetcore2x) inzetten.
 
 Hiervoor wordt er een implementatie van de ```IAuthorizationService``` geregistreerd bij ```Startup.cs``` en geïnjecteerd in ```AppointmentController```.
 
@@ -1476,6 +1476,7 @@ public async Task<IActionResult> Delete(int appointmentId)
 
     if (!authResult.Succeeded)
     {
+        // HTTP Statuscode 403: geen autorisatie
         return Forbid();
     }
 
