@@ -1305,7 +1305,7 @@ In het parent component wordt er geluisterd naar dit event via het [observerpatr
 
 Authenticatie en autorisatie is moeilijk te documenteren, gezien het enerzijds in verschillende lagen van de stack moet geïmplementeerd worden. Anderzijds is het sowieso een ingewikkelde materie waar men best geen fouten maakt.
 
-petshelter maakt gebruik van Auth0 services. Auth0 biedt een compleet platform aan om users te beheren.
+petshelter maakt gebruik van [Auth0 services](https://auth0.com/docs/). Auth0 biedt een [compleet platform aan om users te beheren](https://auth0.com/docs/getting-started/dashboard-overview).
 
 Om te starten met Auth0 moet er een "tenant" aangemaakt worden. Deze wordt geïdentificeerd met een domain. Op deze tenant zit alle authenticatie configuratie: users, roles, rules...
 
@@ -1339,7 +1339,7 @@ function (user, context, callback) {
     auth0.users.updateAppMetadata(user.user_id, user.app_metadata)
         .then(function () {
 
-            // Een rol claim wordt toegevoegd
+            // Een rol claim
             // die we halen uit de Auth0 datastore user,
             // wordt eerst toegevoegd aan de access token (API),
             // en dan aan de id token (SPA)
@@ -1349,7 +1349,7 @@ function (user, context, callback) {
             context.idToken['http://schemas.microsoft.com/.../claims/role'] =
                 user.app_metadata.roles;
 
-            // Een shelter claim wordt toegevoegd
+            // Een shelter claim
             // die we halen uit de Auth0 datastore user,
             // wordt eerst toegevoegd aan de access token (API),
             // en dan aan de id token (SPA)
@@ -1428,7 +1428,7 @@ public async Task<IActionResult> Create([FromForm]CreatePet.Command pet)
 }
 ```
 
-Om voor admin activiteiten userinformatie op te vragen, is er toegang nodig tot de Auth0 userstore. Dit gebeurt wel via een protocol waarbij een *Auth0 API* access token moet verkregen worden. Deze access token is niet gelijk aan die geparst uit de JWT. In petshelter wordt er rechstreeks in de configuratie file een development access token geïnjecteerd. Dit is niet mogelijk in productie.
+Om voor admin activiteiten userinformatie op te vragen, is er toegang nodig tot de Auth0 userstore. Dit gebeurt via een protocol waarbij een *Auth0 API* access token moet verkregen worden. Deze access token is niet gelijk aan JSON *Web* token. In petshelter wordt er rechstreeks in de configuratie file een development access token geïnjecteerd. Dit is niet mogelijk in productie.
 
 Deze Auth0Api Token wordt [verkregen in ruil voor ClientSecret & ClientId](https://auth0.com/docs/flows/concepts/client-credentials) van de API.
 
@@ -1613,6 +1613,7 @@ public class AppointmentAuthorizationCrudHandler : AuthorizationHandler<Operatio
 
 ### Authenticatie
 * https://auth0.com/docs/
+* https://auth0.com/docs/getting-started/dashboard-overview
 * https://auth0.com/docs/architecture-scenarios/spa-api
 * https://auth0.com/docs/quickstart/spa/vuejs/03-calling-an-api#call-the-api-using-an-access-token
 * https://auth0.com/docs/api-auth/tutorials/adoption/scope-custom-claims
