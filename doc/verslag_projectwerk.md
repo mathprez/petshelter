@@ -94,7 +94,7 @@ Na de client gebouwd is zou er een boodschap moeten verschijnen dat petshelterCl
 
 ### API: via dotnet console API
 
-**Pas op: de appsettings.development.json bevat API keys voor o.a. Mailgun. Deze blijven dus beter privaat! In die file kan men ook de TestMail parameter aanpassen.**
+**Pas op: de ```appsettings.development.json``` bevat API keys voor o.a. Mailgun. Deze blijven dus beter privaat! In die file kan men ook de TestMail parameter aanpassen.**
 
 [De API kan gebouwd worden via de dotnet CLI.](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21) Met Visual Studio met .NET Core werkt is de CLI standaard geïnstalleerd. Of bouw het project via Visual Studio zelf. Anders kan met [deze installatiefiles](https://dotnet.microsoft.com/download/dotnet-core/2.2) .NET Core (x64) geïnstalleerd worden.
 
@@ -110,7 +110,7 @@ Voer volgend command uit:
 dotnet run
 ```
 
-Volgens de launchsettings zou de API moeten draaien op https://localhost:44385/. Test de API via de publieke call https://localhost:44385/api/pets.
+Volgens de launchsettings.json zou de API moeten draaien op https://localhost:44385/. Test de API via de publieke call https://localhost:44385/api/pets.
 
 ## Functionele analyse
 
@@ -120,7 +120,7 @@ Een VZW voor dierenbelangen wil graag een platform aanbieden om lokale dierenasi
 
 Het platform moet het immers mogelijk maken om verschillende asielen (shelters) te organiseren, die zelfstandig gemanaged kunnen worden. Elk shelter kan hun eigen huisdierenbestand beheren. Dit huisdierenbestand wordt online ter adoptie aangeboden.
 
-Registratie is niet nodig om een overzicht te verkrijgen van de huisdieren. Maar na registratie kan een bezoeker een afspraak maken om een huisdier te bezoeken en eventueel te adopteren. De input en validatie van de afspraakform moet vlot verlopen. Het is belangrijk dat er geen dubbele afspraken gemaakt worden, zowel de afspraken van user, huisdier en shelters in rekening houdende. Afspraken moeten altijd een halfuur tussen elkaar liggen. Bij het maken van een afspraak wordt een mail verzonden worden naar de user en de handler van het huisdier. Bij de mail is er een afspraakcomponent die met alle populaire mailagenda's samenwerkt (Gmail, Outlook, Apple,...).
+Registratie is niet nodig om een overzicht te verkrijgen van de huisdieren. Maar na registratie kan een bezoeker een afspraak maken om een huisdier te bezoeken en eventueel te adopteren. De input en validatie van de afspraakform moet vlot verlopen. Het is belangrijk dat er geen dubbele afspraken gemaakt worden, zowel de afspraken van user, huisdier en shelters in rekening houdende. Afspraken moeten altijd een halfuur tussen elkaar liggen. Bij het maken van een afspraak wordt een mail verzonden worden naar de user. Bij de mail is er een afspraakcomponent die met alle populaire mailagenda's samenwerkt (Gmail, Outlook, Apple,...).
 
 Een user met admin rol kan een overzicht verkrijgen over alle petshelter users en login informatie. Een admin kan ook een shelter toewijzen aan een user met volunteer rol. Overige zaken kunnen ook via een extern authenticatie dashboard geconfigureerd worden.
 
@@ -254,9 +254,9 @@ petshelter is een applicatie die bestaat uit twee projecten: petshelterAPI & pet
 
 petshelterApi is een webservice geschreven in ASP.NET Core 2.2. De API heeft wat REST elementen, maar het kan het zeker geen RESTful API genoemd worden. Het is de bedoeling dat de API enkel ingezet wordt als data access voor één frontend, en daarom is volledig RESTful werken overbodig.
 
-petshelterClient vormt de brug tussen de user en API via een Vue frontend. Vue is een JavaScript framework. Er worden enkele externe componenten gebruikt zoals Buefy, vue-router, axios, etc... Het zwakke punt aan de client is dat er niet echt een design pattern wordt toegepast. Voor een proof of concept werd dit eerst als redundant beschouwd, maar na enkele componenten te schrijven werd duidelijk dat er veel code herhaald wordt. Een store-pattern (dus: vuex implementatie) en enkele services zou de client code meer onderhoudbaar en scalable maken.
+petshelterClient vormt de brug tussen de user en API via een Vue frontend. Vue is een JavaScript framework. Er worden enkele externe componenten gebruikt zoals Buefy, vue-router, axios, etc... Het zwakke punt aan de client is dat er niet echt een design pattern wordt toegepast. Voor een proof of concept werd dit eerst als redundant beschouwd, maar na enkele componenten te schrijven werd duidelijk dat er veel code herhaald wordt. Een store-pattern (dus: ```vuex``` implementatie) en enkele services zou de client code meer onderhoudbaar en scalable maken.
 
-Authenticatie en autorisatie worden zowel front- als backend geïmplementeerd. De identity provider is Auth0 of Google. Auth0 voorziet ook tools om alles omtrent authenticatie te configureren. Maar sommige stukjes zijn ook configureerbaar via code in de API. In petshelter wordt dit toegepast dat via een implementatie van de HttpClient klasse, die toegang geeft tot de Auth0 userstore.
+Authenticatie en autorisatie worden zowel front- als backend geïmplementeerd. De identity provider is Auth0 of Google. Auth0 voorziet ook tools om alles omtrent authenticatie te configureren. Maar sommige stukjes zijn ook configureerbaar via code in de API. In petshelter wordt dit toegepast dat via een implementatie van de ```HttpClient``` klasse, die toegang geeft tot de Auth0 userstore.
 
 Dit is een diagram van de technologiestack. Nieuwe technologieën hebben een grijze achtergrond.
 
@@ -338,7 +338,7 @@ Een voorbeeld van een toepassing van een CQRS patroon is verschillende ORM frame
 
 Met de [MediatR Nuget Package](https://github.com/jbogard/MediatR) is het mogelijk om op een object georiënteerde manier aan een CQRS design pattern te voldoen. Expliciet ```Query```, ```Model```, ```Command``` en ```CommandResult``` objecten gaan definiëren is mogelijk via een ```IRequest<TResponse>``` interface.
 
-Bovendien vermijden men op die manier dat er logica in de controller wordt uitgevoerd, omdat MediatR het [Mediator design pattern](https://blogs.msdn.microsoft.com/cdndevs/2016/01/26/simplifying-development-and-separating-concerns-with-mediatr/) volgt. Die doet de contoller fungeren als een dispatcher van requesthandlers, code die requests gaan afhandelen met ```IRequest``` implementaties.
+Bovendien vermijden men op die manier dat er logica in de controller wordt uitgevoerd, omdat MediatR het [Mediator design pattern](https://blogs.msdn.microsoft.com/cdndevs/2016/01/26/simplifying-development-and-separating-concerns-with-mediatr/) volgt. Die doet de contoller fungeren als een dispatcher van ```RequestHandler``` klasses, code die requests gaan afhandelen met ```IRequest``` implementaties.
 
 Voor petshelter is dit bijvoorbeeld de feature "Maak afspraak". Vooraleer een user een afspraak kan POSTen, moet hij data krijgen (GET) van beschikbare dagen. Pas daarna kan hij de afspraak POSTen. Dit is een typisch request-response scenario. Dit diagram stelt voor hoe data (de objecten, dit zijn de parallellogrammen), met de requests en responses meegezonden wordt.
 
@@ -409,7 +409,7 @@ Onder de geneste class ```CreateAppointment``` zijn dit de ```Query```, ```Model
 // geneste klasses zijn zorgen voor leesbare codes in controllers, zie hierboven
 public class CreateAppointment
 {
-    /* De data die de GET van de client ons geeft.
+    /* De data die de GET van de client oplevert.
      Class Query erft over van Mediatr interface IRequest
      en heeft als TResponse Model. */
     public class Query : IRequest<Model>
@@ -520,11 +520,11 @@ public class CreateAppointment
 
 #### Asynchroon
 
-In controllers en daarbuiten worden vaak async methods gebruikt. [Volgende uitleg is zeer verhelderend](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/). Het vergelijkt async programmeren met ontbijt klaarmaken. Bijvoorbeeld: eén kok (thread) kan, terwijl er eieren bakken, ook koffie zetten.
+In controllers en daarbuiten worden vaak async methods gebruikt. [Volgende uitleg is zeer verhelderend](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/). Het vergelijkt async programmeren met ontbijt klaarmaken. Bijvoorbeeld: één kok (of thread) kan, terwijl er eieren bakken, ook koffie zetten.
 
 ##### Background tasks met ASP Hosted Services
 
-Background tasks zijn asynchrone task die uitgevoerd kunnen worden buiten of los van een HTTP request. Vaak gaat het over timed background task of jobs. In petshelter wordt een [Queued Background Task](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-2.2) geïmplementeerd om een mail te zenden na een user een afspraak heeft gemaakt. Dat wil zeggen dat wanneer de user zijn afspraak POST, de API niet meer wacht tot de mail effectief verzonden is. In plaats daarvan wordt er een "mail workitem" op een ```BackGroundTaskQueue``` gezet die op een andere thread draait. De user kan weer verder internetten terwijl er in de achtergrond (misschien nog heel wat) data verzameld wordt vooraleer de mail kan worden verzonden.
+Background tasks zijn asynchrone task die uitgevoerd kunnen worden buiten of los van een HTTP request. Vaak gaat het over timed background task of jobs. In petshelter wordt [dankzij HostedServices](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-2.2) een ```QueuedBackGroundTask``` geïmplementeerd om een mail te zenden, na een user een afspraak heeft gemaakt. Dat wil zeggen dat wanneer de user zijn afspraak POST, de API niet meer wacht tot de mail effectief verzonden is. In plaats daarvan wordt er een "mail workitem" op een ```BackGroundTaskQueue``` gezet die op een andere thread draait. De user kan weer verder internetten terwijl er in de achtergrond (misschien nog heel wat) data verzameld wordt vooraleer de mail verzonden is.
 
 Background tasks maken het mogelijk om een request uit te voeren als volgt:
 
@@ -604,14 +604,14 @@ private void AddMailToQueue(object resourceId, UserProfile userProfile)
 
 #### HttpClient
 
-De HttpClient class wordt gebruikt in petshelter voor verschillende zaken:
+De ```HttpClient``` class wordt gebruikt in petshelter voor verschillende zaken:
 
-* een "pet & dogapi client", die gebruikt wordt om seeddata aan te leveren voor de databank.
-* een Auth0Client die dankzij bij ```Startup.cs``` een access token bij de standaard header toe te voegen toegang geeft tot de Auth0 userstore.
+* een "cat & dogapi client", die gebruikt wordt om seeddata aan de databank te leveren.
+* een Auth0Client, die dankzij bij ```Startup.cs``` een access token bij de standaard header toe te voegen, toegang heeft tot de Auth0 userstore.
 
 [HttpClient](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient) spreekt externe API's op een restful manier aan.
 
-De HttpClient wordt geïnitalizeerd als volgt: (in tegenstelling tot ```using```, gezien het soms gevaarlijk is om constant nieuwe HttpClient instanties te maken):
+De HttpClient wordt geïnitaliseerd als volgt: (in tegenstelling tot ```using```, gezien het soms gevaarlijk is om constant nieuwe HttpClient instanties te maken):
 
 ```cs
 //Startup.cs
@@ -695,7 +695,7 @@ De mail die in petshelter wordt verzonden heeft dus een plaintext body, een html
 
 Deze mail wordt gemaakt behulp van twee tools:
 
-* [MimeKit](http://www.mimekit.net/): een libary die ons toelaat om bestanden van een specifiek MimeType aan te maken.
+* [MimeKit](http://www.mimekit.net/): een libary die toelaat bestanden van een specifiek MimeType aan te maken.
 * [ICal.NET](https://github.com/rianjs/ical.net): een tool die na configuratie in code een ICal string teruggeeft.
 
 Daarna wordt de mail verzonden via de [MailGun API](https://documentation.mailgun.com/en/latest/). Er wordt niet rechtsreeks gecommuniceerd met een SMTP server. Dit omdat een simple [API call met het mimebestand](https://stackoverflow.com/questions/38840101/how-to-send-a-ical-invite-with-mailgun-rest-api-c) naar de Mailgun service veel performanter is.
@@ -705,7 +705,7 @@ Een gewone mail via Mailgun verzenden kan ook veel eenvoudiger, door in plaats v
 Via een Mailgun dashboard worden gegevens zoals API key en domain URI.
 
 ```cs
- public class MailGunHttpClient
+public class MailGunHttpClient
 {
     private readonly HttpClient _client;
     public MailGunHttpClient(HttpClient client)
@@ -729,13 +729,13 @@ Via een Mailgun dashboard worden gegevens zoals API key en domain URI.
 }
 ```
 
-Noot: domeinen van de gratis versie van Mailgun worden weerhouden door Microsoft Outlook.
+*Noot: domeinen van de gratis versie van Mailgun worden weerhouden door Microsoft Outlook.*
 
 #### Images uploaden en opslaan in SQL Server
 
 Voor de seeddata worden foto's gebruikt van de ["DogApi"](https://docs.thedogapi.com/) en ["CatApi"](https://docs.thecatapi.com/) van Aden Forshaw, "Dogs/Cats As A Service".
 
-Daarnaast moet een volunteer [een foto uploaden om wanneer die een een huisdier post](https://www.c-sharpcorner.com/article/how-should-we-store-images-and-blob-files-in-sql-server/). Langs frontend zijde heb zijn daarvoor de volgende componenten nodig:
+Daarnaast moet een volunteer [een foto uploaden om wanneer die een een huisdier post](https://www.c-sharpcorner.com/article/how-should-we-store-images-and-blob-files-in-sql-server/). Langs frontend zijde zijn daarvoor de volgende componenten nodig:
 
 Een input tag als type file:
 
@@ -760,7 +760,7 @@ formData.append('image', this.file, this.file.name);
 
 Dit object wordt samen met ```axios``` (een soort frontend HttpClient, zie hieronder) verzonden naar de petshelter API. Daar wordt de file geparst naar een ```IFile``` datatype, om vervolgens gestreamd te worden naar een ```byte``` array. Eerst worden de bytes naar een ```Image``` datatype omgezet om de extensie te kunnen bepalen. Als die geldig is worden de bytes met de overige ```Image``` info opgeslaan in SQL Server als binaire data: ```VARBINARY(MAX)```.
 
-Om deze data te zenden naar de frontend, moet dat via JSON. JSON ondersteunt echter geen ```byte[]``` datatype. Daarom moeten de bytes eerst omgezet worden naar een base64 geëncodeerde string. In petshelter gebeurt dit door AutoMapper:
+Om deze data te zenden naar de frontend, moet dat via JSON. JSON ondersteunt echter geen ```byte[]``` datatype. Daarom moeten de bytes eerst omgezet worden naar een base64 geëncodeerde string. In petshelter gebeurt dit via AutoMapper:
 
 ```cs
 public PetMapping()
@@ -987,7 +987,7 @@ Het is mogelijk de inhoud van de functie rechtsreeks te injecteren:
 
 Hierboven staat er telkens ```app-x``` als Vue object en wat HTML ernaast. Het is de bedoeling dat die JavaScript en HTML *template* samen gebruikt worden, dit is een component. Een webpagina, (zeker in het geval van Single Page Applications), bestaat uit heel wat, vaak herbruikbare, componenten. Zo is er een navigatiebar, tabel, etc...
 
-Dit is een implementatie van "Custom Element", een onderdeel van het Web Component Spec. Elke custom tag (bijvoorbeeld ```app-content```) is een Vue object (component) met daarin een HTML template en JavaScript logica.
+Dit is een implementatie van "Custom Element", een onderdeel van het [Web Component Spec](https://www.webcomponents.org/specs). Elke custom tag (bijvoorbeeld ```app-content```) is een Vue object (component) met daarin een HTML template en JavaScript logica.
 
 Bijvoorbeeld: elke node in onderstaande structuur is een Vue component.
 
@@ -1041,15 +1041,17 @@ Een voorbeeld van zo'n component in .vue formaat (te gebruiken na project creati
 </template>
 
 <script>
-    // hier wordt een component geïmporteerd - vergelijk dit met "using" in C#
-    // nu kunnen we dit component gebruiken in de HTML template
+    // Hier wordt een component geïmporteerd - vergelijk dit met "using" in C#
+    // Nu kunnen we dit component gebruiken in de HTML template
     import HelloWorld from './components/HelloWorld.vue'
 
-    // hier wordt de module (d.i. het Vue object) geëxporteerd. In de index.html wordt de component <app> </app> gebruikt.
+    // Hier wordt de module (d.i. het Vue object) geëxporteerd.
+    // In index.html wordt de component <app> </app> gebruikt.
     export default {
         name: 'app',
+        // hier wordt het component geregistreerd
         components: {
-            HelloWorld // hier wordt het component is geregistreerd
+            HelloWorld 
         }
     }
 </script>
@@ -1063,15 +1065,15 @@ De petshelterClient wordt volgens deze componenttree opgemaakt:
 
 ##### axios
 
-In de uitleg wordt er vaak "data gevraagd aan de petshelterAPI". Dit gebeurt via [axios](https://github.com/axios/axios). Axios initieert RESTful en async HTTP requests. JVie een configuratie object met o.a. ```params``` en ```headers``` kan meegegeven worden.
+In de uitleg wordt er vaak "data gevraagd aan de petshelterAPI". Dit gebeurt via [axios](https://github.com/axios/axios). Axios initieert RESTful en async HTTP requests. Een configuratie object met o.a. ```params``` en ```headers``` kan meegegeven worden.
 
 ##### Lifecycle events
 
-Elk vue component heeft een lifecycle. In die lifecycles zijn er verschillende fases. Per fase zijn worden er 2 events geraised: één voor de fase, en één erna. In het geval van Vue gaat dit als volgt:
+Elk vue component heeft een lifecycle. In die lifecycles zijn er verschillende fases. Per fase zijn worden er twee events geraised: één voor de fase, en één erna. Dit gaat als volgt:
 
 <img src="./UmlDiagrams/VueEvents.PNG" alt="" width="1600px"/>
 
-In petshetlterClient wordt gebruik gemaakt van events, om terwijl het component op de Virtual DOM gemount wordt, data te gaan ophalen van petshelterAPI.
+In petshelterClient wordt gebruik gemaakt van events. Terwijl het component op de Virtual DOM gemount wordt, wordt via de ```mounted()``` event data opgehaald uit petshelterAPI.
 
 ```js
 //CreatePet.vue
@@ -1141,7 +1143,7 @@ In ```App.vue``` staat er een ```<router-view> </router-view>```.
 Wanneer op een ```<router-link></router-link>``` geklikt wordt, gaat ```router.js``` de ```<router-view> </router-view>``` opvullen.
 
 ```html
-<-- Navbar.vue --/>
+<!-- Navbar.vue -->
 <div class="navbar">
     <router-link to="/" class="navbar-item">Home</router-link>
     <router-link to="/Volunteers" class="navbar-item">Nieuw huisdier</router-link>
@@ -1186,7 +1188,7 @@ export default router;
 
 ##### Communicatie
 
-Communicatie tussen componenten kan complex worden. In petshelter is er in de Admin view een component met een tabel met een overzicht van users. Als er op een entry geklikt wordt, verschijnt ernaast een detail getoond van die geselecteerde user, ```selectedUser```.
+Communicatie tussen componenten kan complex worden. In petshelter is er in de Admin view een component met een tabel gevuld met users. Als er op een entry geklikt wordt, verschijnt ernaast een detail getoond van die geselecteerde user, ```selectedUser```.
 
 Het detail wordt gezien als een child component van de overview component. Daarom moeten het component eerst geïmporteerd, en dan geregistreerd zijn in het ```Users.vue``` component.
 
@@ -1216,7 +1218,7 @@ In het template gedeelte wordt het component geplaatst.
 <div class="container">
     <div class="columns">
         <div class="column">
-            <-- we gebruiken het geregistreerde UpdateUser component --/>
+            <!-- we gebruiken het geregistreerde UpdateUser component -->
             <UpdateUser
                 v-bind="selectedUser">
             </UpdateUser>
@@ -1248,14 +1250,14 @@ Merk op dat hier het ```v-bind``` attribuut toevoegd is. In dit geval, de ```sel
 
 Naast het datatype (```String```, ```function```...), kunnen ook nog andere attributen toegevoegd worden zoals ```required``` e.d.
 
-Met ```props``` kan communicatie geconfigureerd worden tussen parent-child.
+Met ```props``` kan dus communicatie geconfigureerd worden tussen parent-child.
 
-In het child component kan een user geüpdatet worden. Dan is het mooi dat ook de tabel uit het parent ook geüpdatet wordt. Dus is ook child-parent communicatie nodig. Een child component kan zijn parent aanspreken, maar dit wordt afgeraden. Het is beter om events te gebruiken:
+In het child component kan een user geüpdatet worden. Dan is het mooi dat ook de tabel uit het parent ook geüpdatet wordt. Dus is ook child-parent communicatie nodig. Een child component kan zijn parent rechtsreeks aanspreken via ```this.$parent```, maar dit wordt afgeraden. Het is beter om events te gebruiken:
 
-* Er is controle over hoe ver omhoog events gaan in de component tree
-* het zorgt voor meer onderhoudbare code
+* er is controle over hoe ver omhoog events gaan in de component tree,
+* het zorgt voor meer onderhoudbare code.
 
-In het child component wordt de user geüpdatet in de ```OnSubmit()``` functie. Wanneer de API een OK statuscode teruggeeft, wordt een event gaan geëmit met de naam ```'userUpdated'```:
+In het child component wordt de user geüpdatet in de ```OnSubmit()``` functie. Wanneer de API een OK statuscode teruggeeft, wordt er een event geëmit met de naam ```'userUpdated'```:
 
 ```js
 // child UpdateUser.vue
@@ -1278,7 +1280,7 @@ async onSubmit() {
 In het parent component wordt er geluisterd naar dit event via het [observerpatroon](https://nl.wikipedia.org/wiki/Observer_(ontwerppatroon)).
 
 ```html
-<-- parent Users.vue --/>
+<!-- parent Users.vue -->
 <UpdateUser
     v-bind="selectedUser"
     @userUpdated="getUsers">
@@ -1291,7 +1293,7 @@ In het parent component wordt er geluisterd naar dit event via het [observerpatr
 
 Authenticatie en autorisatie is moeilijk te documenteren, gezien het enerzijds in verschillende lagen van de stack moet geïmplementeerd worden. Anderzijds is het sowieso een ingewikkelde materie waar men best geen fouten maakt.
 
-Petshelter maakt gebruik van Auth0 services. Auth0 biedt een compleet platform aan om users te beheren.
+petshelter maakt gebruik van Auth0 services. Auth0 biedt een compleet platform aan om users te beheren.
 
 Om te starten met Auth0 moet er een "tenant" aangemaakt worden. Deze wordt geïdentificeerd met een domain. Op deze tenant zit alle authenticatie configuratie: users, roles, rules...
 
@@ -1299,7 +1301,7 @@ Ook mogelijke Idenity providers zijn te configureren. Naast Auth0 is voor petshe
 
 Naast al die zaken, kunnen bestaande applicaties toegevoegd worden via het Auth0 dashboard.
 
-Bij de registreren van een applicatie bij Auth0 krijgt de applicatie een ClientId en ClientSecret toegewezen van Auth0. Met deze gegevens kunnen bijvoorbeeld users inloggen, of de API credentials laten aanvragen voor toegang tot de Auth0 userstore. Zowel de petshelterClient als petshelterAPI zijn geregistreerd bij Auth0. petshelterClient krijgt geen ClientSecret: gezien de publieke aard van Single Page Applications mogen zij die niet bijhouden.
+Bij het registreren van een applicatie krijgt de applicatie een ClientId en ClientSecret toegewezen van Auth0. Met deze gegevens kunnen bijvoorbeeld users inloggen, of de API credentials laten aanvragen voor toegang tot de Auth0 userstore. Zowel de petshelterClient als petshelterAPI zijn geregistreerd bij Auth0. petshelterClient krijgt geen ClientSecret: gezien de publieke aard van Single Page Applications mogen zij die niet bijhouden.
 
 Applicaties loggen als het ware aan bij de tenant met ClientId en ClientSecret, terwijl users aanloggen bij de tenant met hun mail en wachtwoord.
 
@@ -1357,7 +1359,7 @@ function (user, context, callback) {
 
 Er werd reeds vermeld dat een Single Page Application niet met een ClientSecret kan vertrouwd worden. Daarom moet die, in tegenstelling tot een webapp met bijvoorbeeld Razor, geen ClientSecret opgeven. Het volstaat om een ```authservice.js``` te definiëren. Deze service bevat, dankzij het importeren van een ```auth0-js``` package, methods zoals ```login()```, ```getAccessToken()```...
 
-Wanneer een user inlogt via petshelterClient, wordt die verbonden met de Auth0 Authorization API. In ruil voor emailadres en wachtwoord, en de configuratie die meegegeven is door Auth0, Clientid en het domein URI, wordt er een [JSON Web Token](https://jwt.io/) verkregen.
+Wanneer een user inlogt via petshelterClient, wordt die verbonden met de Auth0 Authorization API. In ruil voor emailadres en wachtwoord, en de configuratie die meegegeven is door Auth0 (ClientId en domein URI) wordt er een [JSON Web Token](https://jwt.io/) verkregen.
 
 Om met een SPA in-en uit te loggen, en dus connecteren met de Auth0 Authorisation API, kan er gebruik gemaakt worden van de Implict Grant. Gedetailleerde uitleg [hier](https://auth0.com/docs/flows/guides/implicit/call-api-implicit#response). Kort gezegd wil het zeggen dat wanneer de pagina gerefresht wordt, er opnieuw moet ingelogd worden. Dit gebeurt echter heel vlot door middel van een JSON Web Token. De user hoeft dus niet telkens opnieuw in en uit te loggen (en email + wachtwoord opgeven).
 
@@ -1545,6 +1547,7 @@ public class AppointmentAuthorizationCrudHandler : AuthorizationHandler<Operatio
 * https://sass-lang.com/
 * https://webpack.js.org/ 
 * https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+* https://www.webcomponents.org/specs
 
 ### ASP.NET
 
@@ -1596,7 +1599,7 @@ public class AppointmentAuthorizationCrudHandler : AuthorizationHandler<Operatio
 * https://docs.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads?view=aspnetcore-2.2
 
 ### Authenticatie
-
+* https://auth0.com/docs/
 * https://auth0.com/docs/architecture-scenarios/spa-api
 * https://auth0.com/docs/quickstart/spa/vuejs/03-calling-an-api#call-the-api-using-an-access-token
 * https://auth0.com/docs/api-auth/tutorials/adoption/scope-custom-claims
@@ -1604,6 +1607,7 @@ public class AppointmentAuthorizationCrudHandler : AuthorizationHandler<Operatio
 * https://jwt.io/
 * https://auth0.com/docs/flows/concepts/client-credentials
 * https://docs.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-2.1&tabs=aspnetcore2x
+* http://rion.io/2016/01/04/accessing-identity-info-using-dependency-injection-in-net-5/
 
 ### Tools
 
