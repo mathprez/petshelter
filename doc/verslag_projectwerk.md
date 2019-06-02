@@ -64,7 +64,7 @@ Mathijs Deprez
 
 ### Client: via NPM
 
-[Download en nstalleer Node.js (en NPM) met deze link](https://www.npmjs.com/get-npm).
+[Download en installeer Node.js (en NPM) met deze link](https://www.npmjs.com/get-npm).
 
 Open een console scherm en voer volgende commands uit:
 
