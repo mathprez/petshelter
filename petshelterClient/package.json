@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "auth0-js": "^9.10.4",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "buefy": "^0.7.6",
     "core-js": "^2.6.8",
     "node-sass": "^4.12.0",
